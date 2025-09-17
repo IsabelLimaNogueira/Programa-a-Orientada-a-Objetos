@@ -1,0 +1,84 @@
+from datetime import datetime, timedelta
+# Superclasse  (Generalização)
+class ItemBiblioteca:
+    def __init__(self, nome, autor, edicao, categoria):
+        self.nome = nome
+        self.autor = autor
+        self.edicao = edicao
+        self.categoria = categoria
+        self.data_devolucao = None
+        
+    def emprestar(self, dias=7):
+        self.data_devolucao = datetime.now() + timedelta(days=dias)
+
+    def devolver(self):
+        self.data_devolucao = None
+
+    def esta_emprestado(self):
+        return self.data_devolucao is not None
+
+    def descriçao(self):
+        return f" {self.nome} ({self.categoria}) - {self.autor}, Edição: {self.edicao}"
+
+    # Superclass
+class Livro(ItemBiblioteca):
+    def __init__(self, nome, autor, edicao):
+        super().__init__(nome, autor, edicao, "Livro")
+
+    def descricao(self):
+        return f"📚 Livro: {self.nome} - {self.autor}, Edição {self.edicao}"
+
+
+class Manga(ItemBiblioteca):
+    def __init__(self, nome, autor, edicao):
+        super().__init__(nome, autor, edicao, "Mánga")
+
+    def descricao(self):
+        return f"🍋 Manga: {self.nome} - {self.autor}, Edição {self.edicao}"
+
+
+class Quadrinho(ItemBiblioteca):
+    def __init__(self, nome, autor, edicao):
+        super().__init__(nome, autor, edicao, "Quadrinho")
+
+    def descricao(self):
+        return f"🖼️ Quadrinho: {self.nome} - {self.autor}, Edição {self.edicao}"
+
+
+class BibliotecaModel:
+    def __init__(self):
+        self.itens_disponiveis = []
+        self.itens_emprestados = []
+
+    def adicionar_item(self, categoria, nome, autor, edicao):
+        if categoria == "Livro":
+            novo_item = Livro(nome, autor, edicao)
+        elif categoria == "Manga"
+        novo_item = "Manga" (nome, autor, edicao)
+        elif categoria == "Quadrinho"
+        novo_item = "Quadrinho" (nome, autor, edicao)
+        else:
+        raise ValueError("Categoria Inválida"):
+        self.itens_disponiveis.append(novo_item)
+
+    def listar_disponiveis(self):
+        return self.itens_disponiveis
+
+    def listar_emprestados(self):
+        return self.itens_emprestados
+
+    def remover_item(self, indice):
+        if 0 <= indice < len(self.itens_disponiveis):
+            self.itens_disponiveis.pop(indice)
+
+    def emprestar_item(self, indice, dias=7):
+        if 0 <= indice < len(self.itens_disponiveis):
+            item = self.itens_disponiveis.pop(indice)
+            item.emprestar(dias)
+            self.itens_emprestados.append(item)
+
+    def devolver_item(self, indice):
+        if 0 <= indice < len(self.itens_emprestados):
+            item = self.itens_emprestados.pop(indice)
+            item.devolver()
+            self.itens_disponiveis.append(item)
